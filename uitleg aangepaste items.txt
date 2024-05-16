@@ -1,0 +1,71 @@
+Hier zijn de aanpassingen die nodig zijn in je PowerShell-script:
+
+1. **Aanpassing van standaardwaarden op basis van argumenten bij start:**
+   - Om de standaardwaarden van `$minuten` en `$server` te vervangen door de meegegeven argumenten bij het starten van het script, moeten we controleren of er argumenten zijn meegegeven en ze toewijzen aan de juiste variabelen.
+   - Dit kan worden gedaan met behulp van de `$args` variabele die automatisch wordt gevuld met de argumenten bij het uitvoeren van het script.
+
+   ```powershell
+   # Zorg dat de standaardwaarden worden overschreven als er argumenten zijn meegegeven bij de start
+   if ($args.Count -ge 1) {
+       $minuten = [int]$args[0]
+   }
+   if ($args.Count -ge 2) {
+       $server = $args[1]
+   }
+   ```
+
+2. **Herhaal de acties gedurende de opgegeven minuten:**
+   - Om de acties binnen de aangewezen tijdsperiode te herhalen, moeten we een lus implementeren die wordt uitgevoerd tot de opgegeven tijd is verstreken.
+   - Dit kan worden bereikt door een while-lus te gebruiken die de huidige tijd vergelijkt met de stop-tijd.
+
+   ```powershell
+   # Begin van de lus die acties herhaalt tot de aangewezen minuten zijn verstreken
+   while ((Get-Date) -lt $stopTijd) {
+       # Plaats hier de acties die binnen de lus moeten worden herhaald
+   }
+   ```
+
+3. **Iets op het scherm zien bewegen tussen herhalingen:**
+   - Om iets op het scherm te laten bewegen tussen herhalingen, kun je bijvoorbeeld een simpele punt of een bericht weergeven.
+
+   ```powershell
+   # Iets op het scherm laten bewegen gedurende de 5 seconden tussen de herhalingen
+   Write-Host "." -NoNewline
+   Start-Sleep -Seconds 1  # Wacht 1 seconde
+   Write-Host "." -NoNewline
+   Start-Sleep -Seconds 1  # Wacht 1 seconde
+   Write-Host "." -NoNewline
+   Start-Sleep -Seconds 1  # Wacht 1 seconde
+   Write-Host "." -NoNewline
+   Start-Sleep -Seconds 1  # Wacht 1 seconde
+   Write-Host "." -NoNewline
+   Start-Sleep -Seconds 1  # Wacht 1 seconde
+   ```
+
+4. **Whitelist beheren en signaleringen afdrukken:**
+   - Voeg code toe om de gebruiker te vragen of de whitelist moet worden geleegd en om de signaleringen af te drukken op basis van de gebruikersinput.
+
+   ```powershell
+   # Vraag of de whitelist moet worden geleegd en accepteer alleen y en n
+   $clearWhiteList = Read-Host "Moet de whitelist worden geleegd? (y/n)"
+   if ($clearWhiteList -eq 'y') {
+       $arrayMetWhiteList = @()  # Lege whitelist
+   }
+
+   # Vraag of de signaleringen moeten worden afgedrukt
+   $printSignaleringen = Read-Host "Moeten de signaleringen worden afgedrukt? (y/n)"
+   if ($printSignaleringen -eq 'y') {
+       Write-Host "`n`n======================`nSignaleringen van $startTijd tot $stopTijd`n"
+       Get-Content -Path $signaleringenFile
+   }
+   ```
+
+5. **Toevoegen van einddatum/tijd aan afsluitende boodschap:**
+   - Voeg de einddatum/tijd toe aan de afsluitende boodschap.
+
+   ```powershell
+   # Voeg de einddatum/tijd toe aan de afsluitende boodschap
+   Write-Host "======================`nProcesChecker is beëindigd om $(Get-Date)"  
+   ```
+
+Met deze aanpassingen zal je script argumenten bij de start verwerken, acties herhalen gedurende de opgegeven minuten, iets op het scherm laten bewegen tussen herhalingen, de whitelist beheren, signaleringen afdrukken en een afsluitende boodschap weergeven met de einddatum/tijd.
